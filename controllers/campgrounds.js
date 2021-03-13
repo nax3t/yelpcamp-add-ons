@@ -6,8 +6,23 @@ const { cloudinary } = require("../cloudinary");
 
 
 module.exports.index = async (req, res) => {
-    const campgrounds = await Campground.find({}).populate('popupText');
-    res.render('campgrounds/index', { campgrounds })
+    if (!req.query.page) {
+        const campgrounds = await Campground.paginate({}, {
+            populate: {
+                path: 'popupText'
+            }
+        });
+        res.render('campgrounds/index', { campgrounds })
+    } else {
+        const { page } = req.query;
+        const campgrounds = await Campground.paginate({}, {
+            page,
+            populate: {
+                path: 'popupText'
+            }
+        });
+        res.status(200).json(campgrounds);
+    }
 }
 
 module.exports.renderNewForm = (req, res) => {
