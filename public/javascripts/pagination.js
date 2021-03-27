@@ -11,6 +11,8 @@ paginate.addEventListener('click', function(e) {
             }
             let { nextPage } = data;
             this.href = this.href.replace(/page=\d+/, `page=${nextPage}`);
+            campgrounds.features.push(...data.docs);
+            map.getSource('campgrounds').setData(campgrounds);
         })
         .catch(err => console.log('ERROR',err));
 })
